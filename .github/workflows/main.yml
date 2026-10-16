@@ -1,0 +1,30 @@
+name: Windows EXE Olustur
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Kodlari Indir
+      uses: actions/checkout@v4
+
+    - name: Python Kurulumu
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Kutuphaneleri Yukle ve EXE Derle
+      run: |
+        pip install customtkinter pyinstaller
+        pyinstaller --noconsole --onefile --collect-all customtkinter yoklama_app.py
+
+    - name: EXE Dosyasini Kaydet (Artifact)
+      uses: actions/upload-artifact@v4
+      with:
+        name: Yoklama_Programi_EXE
+        path: dist/yoklama_app.exe
